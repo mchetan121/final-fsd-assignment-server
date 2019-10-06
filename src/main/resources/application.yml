@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: EmployeeInfo
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/projectMGMT?useSSL=false
+    username: root
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    generate-ddl: true
+    show-sql: true 
+    naming:
+    implicit-strategy: org.hibernate.boot.model.naming.ImplicitNamingStrategyLegacyJpaImpl
+    physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    #eureka: 
+#  client: 
+#    serviceUrl: 
+#       defaultZone: ${EUREKA_URI:http://localhost:9898/eureka/}
+#  instance:
+#    prefer-ip-address: true
+#    home-page-url: http://localhost:9898/
+#    
+server:
+ port: 9000
