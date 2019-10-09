@@ -2,70 +2,136 @@ package com.example.projectMGMT.controllers;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.InitBinder;
 
 import com.example.projectMGMT.models.User;
-import com.example.projectMGMT.response.ResponseModel;
 import com.example.projectMGMT.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@SpringBootTest(classes = { UserControllerTest.class})
+@SpringBootTest(classes = { UserControllerTest.class })
 public class UserControllerTest {
 
-    @Mock
-    private UserService userService;
+	@Mock
+	private UserService userService;
 
-    @InjectMocks
-    private UserController userController;
+	@InjectMocks
+	private UserController userController;
 
-    private MockMvc mockMvc;
+	private MockMvc mockMvc;
 
-    @InitBinder
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        this.mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
-    }
+	@Before
+	public void init() throws Exception {
 
-    @Test
-    public void shouldReturnOKResponse() throws Exception {
-        User user = new User();
-        user.setFirstName("chetan");
-        user.setLastName("Mahajan");
+		MockitoAnnotations.initMocks(this);
+		this.mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
 
-        Mockito.when(userService.addUser(Mockito.any())).thenReturn(getFixedResponse());
+	}
 
-        ObjectMapper mapper = new ObjectMapper();
-        String requestAsString = mapper.writeValueAsString(user);
+	@Test
+	public void shouldReturnOKResponseinsertUser() throws Exception {
+		User user = new User();
+		user.setFirstName("chetan");
+		user.setLastName("Mahajan");
 
-        String uri = "/insertUser";
+		ObjectMapper mapper = new ObjectMapper();
+		String requestAsString = mapper.writeValueAsString(user);
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.post("/insertUser").content(requestAsString)
+						.accept(MediaType.APPLICATION_JSON_UTF8).contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andReturn();
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(uri).accept(MediaType.APPLICATION_JSON)
-                .content(requestAsString).contentType(MediaType.APPLICATION_JSON)).andReturn();
+		assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+	}
 
-        ResponseEntity<ResponseModel> responseProcessor = (ResponseEntity<ResponseModel>) mvcResult
-                .getAsyncResult();
-        assertEquals(responseProcessor.getStatusCodeValue(), HttpStatus.OK.value());
-    }
+	@Test
+	public void shouldReturnOKResponseupdateUser() throws Exception {
+		User user = new User();
+		user.setFirstName("chetan");
+		user.setLastName("Mahajan");
 
-    public ResponseModel getFixedResponse() {
-        ResponseModel response = new ResponseModel();
-        response.setStatusCode(200);
-        response.setMessage("OK");
-        return response;
+		ObjectMapper mapper = new ObjectMapper();
+		String requestAsString = mapper.writeValueAsString(user);
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.post("/updateUser").content(requestAsString)
+						.accept(MediaType.APPLICATION_JSON_UTF8).contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andReturn();
 
-    }
+		assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+	}
+
+	@Test
+	public void shouldReturnOKResponsedeleteUser() throws Exception {
+		User user = new User();
+		user.setFirstName("chetan");
+		user.setLastName("Mahajan");
+
+		ObjectMapper mapper = new ObjectMapper();
+		String requestAsString = mapper.writeValueAsString(user);
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.post("/deleteUser").content(requestAsString)
+						.accept(MediaType.APPLICATION_JSON_UTF8).contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andReturn();
+
+		assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+	}
+
+	@Test
+	public void shouldReturnOKResponsegetallUser() throws Exception {
+		User user = new User();
+		user.setFirstName("chetan");
+		user.setLastName("Mahajan");
+
+		ObjectMapper mapper = new ObjectMapper();
+		String requestAsString = mapper.writeValueAsString(user);
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.post("/getallUser").content(requestAsString)
+						.accept(MediaType.APPLICATION_JSON_UTF8).contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andReturn();
+
+		assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+	}
+
+	@Test
+	public void shouldReturnOKResponsegetUserbyid() throws Exception {
+		User user = new User();
+		user.setFirstName("chetan");
+		user.setLastName("Mahajan");
+
+		ObjectMapper mapper = new ObjectMapper();
+		String requestAsString = mapper.writeValueAsString(user);
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.post("/getUserbyid").content(requestAsString)
+						.accept(MediaType.APPLICATION_JSON_UTF8).contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andReturn();
+
+		assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+	}
+
+	@Test
+	public void shouldReturnOKResponsegetUserbytid() throws Exception {
+		User user = new User();
+		user.setFirstName("chetan");
+		user.setLastName("Mahajan");
+
+		ObjectMapper mapper = new ObjectMapper();
+		String requestAsString = mapper.writeValueAsString(user);
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.post("/getUserbytid").content(requestAsString)
+						.accept(MediaType.APPLICATION_JSON_UTF8).contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andReturn();
+
+		assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+	}
 
 }
