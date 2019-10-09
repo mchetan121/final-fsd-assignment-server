@@ -2,73 +2,132 @@ package com.example.projectMGMT.controllers;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.bind.annotation.InitBinder;
 
 import com.example.projectMGMT.models.Task;
-import com.example.projectMGMT.response.ResponseModel;
 import com.example.projectMGMT.service.TaskService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = { TaskControllerTest.class })
 public class TaskControllerTest {
 
-    @Mock
-    private TaskService taskService;
+	@Mock
+	private TaskService taskService;
 
-    @InjectMocks
-    private TaskController taskController;
+	@InjectMocks
+	private TaskController taskController;
 
-    private MockMvc mockMvc;
+	private MockMvc mockMvc;
 
-    @InitBinder
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        this.mockMvc = MockMvcBuilders.standaloneSetup(taskController).build();
-    }
+	@Before
+	public void init() throws Exception {
 
-    @Test
-    public void shouldReturnOKResponse() throws Exception {
-        Task task = new Task();
-        task.setTaskId(1l);
-        task.setTask("Add");
+		MockitoAnnotations.initMocks(this);
+		this.mockMvc = MockMvcBuilders.standaloneSetup(taskController).build();
 
-        Mockito.when(taskService.addTask(Mockito.any())).thenReturn(getFixedResponse());
+	}
 
-        ObjectMapper mapper = new ObjectMapper();
-        String requestAsString = mapper.writeValueAsString(task);
+	@Test
+	public void shouldReturnOKResponseinsertTask() throws Exception {
+		Task task = new Task();
+		task.setTaskId(1l);
+		task.setTask("Add");
 
-        String uri = "/insertTask";
+		ObjectMapper mapper = new ObjectMapper();
+		String requestAsString = mapper.writeValueAsString(task);
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.post("/insertTask").content(requestAsString)
+						.accept(MediaType.APPLICATION_JSON_UTF8).contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andReturn();
 
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(uri).accept(MediaType.APPLICATION_JSON)
-                .content(requestAsString).contentType(MediaType.APPLICATION_JSON)).andReturn();
+		assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+	}
+	
+	@Test
+	public void shouldReturnOKResponseupdateTask() throws Exception {
+		Task task = new Task();
+		task.setTaskId(1l);
+		task.setTask("Add");
 
-        ResponseEntity<ResponseModel> responseProcessor = (ResponseEntity<ResponseModel>) mvcResult
-                .getAsyncResult();
-        assertEquals(responseProcessor.getStatusCodeValue(), HttpStatus.OK.value());
-    }
+		ObjectMapper mapper = new ObjectMapper();
+		String requestAsString = mapper.writeValueAsString(task);
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.post("/updateTask").content(requestAsString)
+						.accept(MediaType.APPLICATION_JSON_UTF8).contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andReturn();
 
-    public ResponseModel getFixedResponse() {
-        ResponseModel response = new ResponseModel();
-        response.setStatusCode(200);
-        response.setMessage("OK");
-        return response;
+		assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+	}
+	@Test
+	public void shouldReturnOKResponsedeleteTask() throws Exception {
+		Task task = new Task();
+		task.setTaskId(1l);
+		task.setTask("Add");
 
-    }
+		ObjectMapper mapper = new ObjectMapper();
+		String requestAsString = mapper.writeValueAsString(task);
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.post("/deleteTask").content(requestAsString)
+						.accept(MediaType.APPLICATION_JSON_UTF8).contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andReturn();
+
+		assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+	}
+	@Test
+	public void shouldReturnOKResponsegetallTask() throws Exception {
+		Task task = new Task();
+		task.setTaskId(1l);
+		task.setTask("Add");
+
+		ObjectMapper mapper = new ObjectMapper();
+		String requestAsString = mapper.writeValueAsString(task);
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.post("/getallTask").content(requestAsString)
+						.accept(MediaType.APPLICATION_JSON_UTF8).contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andReturn();
+
+		assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+	}
+	@Test
+	public void shouldReturnOKResponsegetallparenttaskbypid() throws Exception {
+		Task task = new Task();
+		task.setTaskId(1l);
+		task.setTask("Add");
+
+		ObjectMapper mapper = new ObjectMapper();
+		String requestAsString = mapper.writeValueAsString(task);
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.post("/getallparenttaskbypid").content(requestAsString)
+						.accept(MediaType.APPLICATION_JSON_UTF8).contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andReturn();
+
+		assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+	}
+	@Test
+	public void shouldReturnOKResponsegetTaskbyid() throws Exception {
+		Task task = new Task();
+		task.setTaskId(1l);
+		task.setTask("Add");
+
+		ObjectMapper mapper = new ObjectMapper();
+		String requestAsString = mapper.writeValueAsString(task);
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.post("/getTaskbyid").content(requestAsString)
+						.accept(MediaType.APPLICATION_JSON_UTF8).contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andReturn();
+
+		assertEquals(result.getResponse().getStatus(), HttpStatus.OK.value());
+	}
 
 }
